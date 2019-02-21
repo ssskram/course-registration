@@ -17,6 +17,9 @@ module.exports = async (context, req) => {
         .then(res => res.json())
         .then(data => data)
 
+    context.log(new Date(course[0].startDate))
+    context.log(new Date(course[0].endDate))
+    
     // base sendgrid load
     let load = {
         to: user,
@@ -96,8 +99,6 @@ module.exports = async (context, req) => {
     }
 
     const calendarEvent = async () => {
-        context.log(new Date(course[0].startDate))
-        context.log(new Date(course[0].endDate))
         const event = {
             subject: course[0].courseName,
             body: {
