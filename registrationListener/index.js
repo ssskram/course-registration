@@ -123,6 +123,7 @@ module.exports = async (context, req) => {
                 'Content-type': 'application/json'
             })
         })
+        // catch response here and create record in event tables, SP
         return
     }
 }
