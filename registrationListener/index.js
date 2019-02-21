@@ -14,6 +14,7 @@ module.exports = (context, req) => {
     }
     context.done()
 
+    // test test
     // http endpoint
     // takes a registration record in the body
     // and an activity type in as a query param, "Update" || "New"

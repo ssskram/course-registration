@@ -8,6 +8,7 @@
     "node": "8.11.1"
   },
   "scripts": {
-    "deploy": "node deploy/production.js"
+    "production": "node deploy/production.js",
+    "staging": "node deploy/staging.js"
   }
 }
