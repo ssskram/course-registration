@@ -113,12 +113,7 @@ module.exports = async (context, req) => {
             location: {
                 "displayName": course[0].courseLocation
             },
-            attendees: [{
-                emailAddress: {
-                    "address": user
-                },
-                "type": "required"
-            }]
+            attendees: []
         }
         await fetch('https://365proxy.azurewebsites.us/calendar/newEvent?user=' + user, {
             method: 'POST',
