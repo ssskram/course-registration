@@ -1,0 +1,15 @@
+# secrets
+.env
+
+# dependencies
+node_modules
+
+# deployment scripts
+deploy
+local.settings.json
+
+# dev environment
+extensions.csproj
+.vscode
+bin
+obj

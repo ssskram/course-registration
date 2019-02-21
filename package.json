@@ -1,0 +1,13 @@
+{
+  "name": "course-registrations",
+  "version": "1.0.0",
+  "dependencies": {
+    "shelljs": "^0.8.3"
+  },
+  "engines": {
+    "node": "8.11.1"
+  },
+  "scripts": {
+    "deploy": "node deploy/production.js"
+  }
+}
