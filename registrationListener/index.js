@@ -103,12 +103,12 @@ module.exports = async (context, req) => {
                 "content": course[0].courseDescription
             },
             start: {
-                "dateTime": new Date(course[0].startDate),
-                "timeZone": "UTC"
+                "dateTime": course[0].startDate,
+                "timeZone": "America/New_York"
             },
             end: {
-                "dateTime": new Date(course[0].endDate),
-                "timeZone": "UTC"
+                "dateTime": course[0].endDate,
+                "timeZone": "America/New_York"
             },
             location: {
                 "displayName": course[0].courseLocation
