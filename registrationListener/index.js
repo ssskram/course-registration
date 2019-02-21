@@ -8,7 +8,14 @@ module.exports = async (context, req) => {
     const activity = req.query.type
     const registrationType = req.body.registrationType
     const user = req.body.user
-    const course = getCourse()
+    const course = await fetch("https://365proxy.azurewebsites.us/iphelp/course?courseCode=" + req.body.courseCode, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + process.env.APP_365_API
+            })
+        })
+        .then(res => res.json())
+        .then(data => data)
 
     // base sendgrid load
     let load = {
@@ -23,20 +30,26 @@ module.exports = async (context, req) => {
         if (registrationType == "Active") {
             const path = __dirname + '//emailTemplates/activeRegistration.html'
             fs.readFile(path, 'utf8', async (err, data) => {
-                load.subject = "You have been registered for a course"
-                load.html = await String.format(data, course[0].courseName) // 0
+                load.subject = "Course registration complete"
+                load.html = await String.format(data,
+                    course[0].courseName, // 0
+                    course[0].courseDescription, // 1
+                    course[0].startDate, // 2
+                    "www.google.com") // 3
                 await sendEmail(load)
-                context.done()
             })
         }
 
         if (registrationType == "Waitlisted") {
             const path = __dirname + '//emailTemplates/waitlistedRegistration.html'
             fs.readFile(path, 'utf8', async (err, data) => {
-                load.subject = "You have been waitlisted for a course"
-                load.html = await String.format(data, course[0].courseName) // 0
+                load.subject = "You're on the waitlist"
+                load.html = await String.format(data,
+                    course[0].courseName, // 0
+                    course[0].courseDescription, // 1
+                    course[0].startDate, // 2
+                    "www.google.com") // 3                
                 await sendEmail(load)
-                context.done()
             })
         }
     }
@@ -44,36 +57,30 @@ module.exports = async (context, req) => {
         if (registrationType == "Active") {
             const path = __dirname + '//emailTemplates/activeRegistration.html'
             fs.readFile(path, 'utf8', async (err, data) => {
-                load.subject = "You have been registered for a course"
-                load.html = await String.format(data, course[0].courseName) // 0
+                load.subject = "Course registration complete"
+                load.html = await String.format(data,
+                    course[0].courseName, // 0
+                    course[0].courseDescription, // 1
+                    course[0].startDate, // 2
+                    "www.google.com") // 3                
                 await sendEmail(load)
-                context.done()
             })
         }
         if (registrationType == "Canceled") {
             const path = __dirname + '//emailTemplates/canceledRegistration.html'
             fs.readFile(path, 'utf8', async (err, data) => {
                 load.subject = "Course registration canceled"
-                load.html = await String.format(data, course[0].courseName) // 0
+                load.html = await String.format(data,
+                    course[0].courseName, // 0
+                    course[0].courseDescription, // 1
+                    course[0].startDate) // 2                
                 await sendEmail(load)
-                context.done()
             })
         }
     }
 
-    const getCourse = async () => {
-        return await fetch("https://365proxy.azurewebsites.us/iphelp/course?courseCode=" + req.body.courseCode, {
-                method: 'get',
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + process.env.APP_365_API
-                })
-            })
-            .then(res => res.json())
-            .then(data => data)
-    }
-
     const sendEmail = async (load) => {
-        await fetch('http://localhost:3000/sendMail/single', {
+        await fetch('https://sendgridproxy.azurewebsites.us/sendMail/single', {
             method: 'POST',
             body: JSON.stringify(load),
             headers: new Headers({
