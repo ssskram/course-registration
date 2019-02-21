@@ -16,9 +16,6 @@ module.exports = async (context, req) => {
         })
         .then(res => res.json())
         .then(data => data)
-
-    context.log(new Date(course[0].startDate))
-    context.log(new Date(course[0].endDate))
     
     // base sendgrid load
     let load = {
@@ -107,11 +104,11 @@ module.exports = async (context, req) => {
             },
             start: {
                 "dateTime": new Date(course[0].startDate),
-                "timeZone": "Etc/GMT+12"
+                "timeZone": "UTC"
             },
             end: {
                 "dateTime": new Date(course[0].endDate),
-                "timeZone": "Etc/GMT+12"
+                "timeZone": "UTC"
             },
             location: {
                 "displayName": course[0].courseLocation
