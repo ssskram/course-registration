@@ -103,12 +103,10 @@ module.exports = async (context, req) => {
                 "content": course[0].courseDescription
             },
             start: {
-                "dateTime": new Date(course[0].startDate),
-                "timeZone": "Eastern Standard Time"
+                "dateTime": new Date(course[0].startDate)
             },
             end: {
-                "dateTime": new Date(course[0].endDate),
-                "timeZone": "Eastern Standard Time"
+                "dateTime": new Date(course[0].endDate)
             },
             location: {
                 "displayName": course[0].courseLocation
