@@ -1,9 +1,6 @@
 # secrets
 .env
 
-# dependencies
-node_modules
-
 # deployment scripts
 deploy
 local.settings.json
@@ -13,3 +10,4 @@ extensions.csproj
 .vscode
 bin
 obj
+local.settings.json
