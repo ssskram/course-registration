@@ -35,7 +35,9 @@ module.exports = async (context, req) => {
                     course[0].courseName, // 0
                     course[0].courseDescription, // 1
                     course[0].startDate, // 2
-                    "www.google.com") // 3
+                    course[0].courseLocation, // 3
+                    "www.google.com") // 4
+                // create outlook calendar event here
                 await sendEmail(load)
             })
         }
@@ -62,7 +64,9 @@ module.exports = async (context, req) => {
                     course[0].courseName, // 0
                     course[0].courseDescription, // 1
                     course[0].startDate, // 2
-                    "www.google.com") // 3                
+                    course[0].courseLocation, // 3
+                    "www.google.com") // 4
+                // create outlook calendar event here                
                 await sendEmail(load)
             })
         }
@@ -73,7 +77,8 @@ module.exports = async (context, req) => {
                 load.html = await String.format(data,
                     course[0].courseName, // 0
                     course[0].courseDescription, // 1
-                    course[0].startDate) // 2                
+                    course[0].startDate) // 2
+                // remove outlook calendar event here                
                 await sendEmail(load)
             })
         }
