@@ -96,6 +96,8 @@ module.exports = async (context, req) => {
     }
 
     const calendarEvent = async () => {
+        context.log(new Date(course[0].startDate))
+        context.log(new Date(course[0].endDate))
         const event = {
             subject: course[0].courseName,
             body: {
@@ -104,11 +106,11 @@ module.exports = async (context, req) => {
             },
             start: {
                 "dateTime": new Date(course[0].startDate),
-                "timeZone": "America/New_York"
+                "timeZone": "Etc/GMT+12"
             },
             end: {
                 "dateTime": new Date(course[0].endDate),
-                "timeZone": "America/New_York"
+                "timeZone": "Etc/GMT+12"
             },
             location: {
                 "displayName": course[0].courseLocation
