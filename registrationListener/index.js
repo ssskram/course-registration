@@ -37,7 +37,7 @@ module.exports = async (context, req) => {
                     course[0].startDate, // 2
                     course[0].courseLocation, // 3
                     "www.google.com") // 4
-                // create outlook calendar event here
+                await calendarEvent()
                 await sendEmail(load)
             })
         }
@@ -66,7 +66,7 @@ module.exports = async (context, req) => {
                     course[0].startDate, // 2
                     course[0].courseLocation, // 3
                     "www.google.com") // 4
-                // create outlook calendar event here                
+                await calendarEvent()             
                 await sendEmail(load)
             })
         }
@@ -93,6 +93,42 @@ module.exports = async (context, req) => {
                 'Content-type': 'application/json'
             })
         })
+    }
+
+    const calendarEvent = async () => {
+        const event = {
+            subject: course[0].courseName,
+            body: {
+                "contentType": "HTML",
+                "content": course[0].courseDescription
+            },
+            start: {
+                "dateTime": new Date(course[0].startDate),
+                "timeZone": "Eastern Standard Time"
+            },
+            end: {
+                "dateTime": new Date(course[0].endDate),
+                "timeZone": "Eastern Standard Time"
+            },
+            location: {
+                "displayName": course[0].courseLocation
+            },
+            attendees: [{
+                emailAddress: {
+                    "address": user
+                },
+                "type": "required"
+            }]
+        }
+        await fetch('https://365proxy.azurewebsites.us/calendar/newEvent?user=' + user, {
+            method: 'POST',
+            body: JSON.stringify(event),
+            headers: new Headers({
+                'Authorization': 'Bearer ' + process.env.APP_365_API,
+                'Content-type': 'application/json'
+            })
+        })
+        return
     }
 }
 
