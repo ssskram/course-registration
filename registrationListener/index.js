@@ -5,6 +5,7 @@ global.Headers = fetch.Headers
 module.exports = async (context, req) => {
 
     // registration details
+    const registrationId = req.query.body.registrationId
     const activity = req.query.type
     const registrationType = req.body.registrationType
     const user = req.body.user
@@ -16,7 +17,7 @@ module.exports = async (context, req) => {
         })
         .then(res => res.json())
         .then(data => data)
-    
+
     // base sendgrid load
     let load = {
         to: user,
@@ -66,7 +67,7 @@ module.exports = async (context, req) => {
                     course[0].startDate, // 2
                     course[0].courseLocation, // 3
                     "www.google.com") // 4
-                await calendarEvent()             
+                await calendarEvent()
                 await sendEmail(load)
             })
         }
@@ -78,7 +79,6 @@ module.exports = async (context, req) => {
                     course[0].courseName, // 0
                     course[0].courseDescription, // 1
                     course[0].startDate) // 2
-                // remove outlook calendar event here                
                 await sendEmail(load)
             })
         }
@@ -116,14 +116,26 @@ module.exports = async (context, req) => {
             attendees: []
         }
         await fetch('https://365proxy.azurewebsites.us/calendar/newEvent?user=' + user, {
-            method: 'POST',
-            body: JSON.stringify(event),
-            headers: new Headers({
-                'Authorization': 'Bearer ' + process.env.APP_365_API,
-                'Content-type': 'application/json'
+                method: 'POST',
+                body: JSON.stringify(event),
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + process.env.APP_365_API,
+                    'Content-type': 'application/json'
+                })
             })
-        })
-        // catch response here and create record in event tables, SP
+            .then(eventId => {
+                fetch('https://365proxy.azurewebsites.us/iphelp/courseRegistrationCalendarEvent', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "Registration_x0020_ID": eventId,
+                        "Event_x0020_ID": registrationId
+                    }),
+                    headers: new Headers({
+                        'Authorization': 'Bearer ' + process.env.APP_365_API,
+                        'Content-type': 'application/json'
+                    })
+                })
+            })
         return
     }
 }
