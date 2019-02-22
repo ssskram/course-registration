@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+var fs = require('fs')
 global.Headers = fetch.Headers
 
 module.exports = async (context, timer) => {
@@ -75,7 +76,6 @@ module.exports = async (context, timer) => {
     })
 
     impendingCourses.forEach(course => {
-        context.log(course.courseCode)
         const courseRegistrations = registrations.filter(reg => reg.courseCode == course.courseCode)
         courseRegistrations.filter(c => c.registrationStatus == "Active").forEach(activeReg => {
             fs.readFile(path, 'utf8', async (err, email) => {
