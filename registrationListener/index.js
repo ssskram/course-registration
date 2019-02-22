@@ -9,6 +9,8 @@ module.exports = async (context, req) => {
     const activity = req.query.type
     const registrationType = req.body.registrationType
     const user = req.body.user
+    const cancelUrl = process.env.CANCEL_URL + "&id=" + registrationId + "&user=" + user
+    context.log(cancelUrl)
     const course = await fetch("https://365proxy.azurewebsites.us/iphelp/course?courseCode=" + req.body.courseCode, {
             method: 'get',
             headers: new Headers({
@@ -37,7 +39,7 @@ module.exports = async (context, req) => {
                     course[0].courseDescription, // 1
                     course[0].startDate, // 2
                     course[0].courseLocation, // 3
-                    "www.google.com") // 4
+                    cancelUrl) // 4
                 await calendarEvent()
                 await sendEmail(load)
             })
@@ -51,7 +53,7 @@ module.exports = async (context, req) => {
                     course[0].courseName, // 0
                     course[0].courseDescription, // 1
                     course[0].startDate, // 2
-                    "www.google.com") // 3                
+                    cancelUrl) // 3                
                 await sendEmail(load)
             })
         }
@@ -66,7 +68,7 @@ module.exports = async (context, req) => {
                     course[0].courseDescription, // 1
                     course[0].startDate, // 2
                     course[0].courseLocation, // 3
-                    "www.google.com") // 4
+                    cancelUrl) // 4
                 await calendarEvent()
                 await sendEmail(load)
             })

@@ -4,7 +4,7 @@ global.Headers = fetch.Headers
 module.exports = async (context, req) => {
 
     // incoming params
-    const registrationId = req.query.registrationId
+    const registrationId = req.query.id
     const user = req.query.user
 
     // set registration status == "Canceled"
