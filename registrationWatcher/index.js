@@ -43,14 +43,15 @@ module.exports = async (context, timer) => {
         context.log("Active enrollments: " + activeEnrollments.length)
         const waitlistedEnrollments = allEnrollments.filter(reg => reg.registrationStatus == "Waitlisted")
         context.log("Waitlisted enrollments: " + waitlistedEnrollments.length)
-        if (activeEnrollments < maxCapacity) {
+        if (activeEnrollments.length < maxCapacity) {
             context.log("Space available: true")
             if (waitlistedEnrollments.length > 0) {
                 context.log("Waitlist exists: true")
-                const spotsToFill = maxCapacity - activeEnrollments
+                const spotsToFill = maxCapacity - activeEnrollments.length
                 context.log("Spots to fill: " + spotsToFill)
                 const sortedByDateSubmitted = waitlistedEnrollments.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
                 const registrationsToBump = sortedByDateSubmitted.slice(0, spotsToFill)
+                context.log("Registration to bump: " + registrationsToBump.length)
                 registrationsToBump.forEach(registration => {
                     fetch('https://365proxy.azurewebsites.us/iphelp/updateCourseRegistration?id=' + registration.registrationId, {
                         method: 'POST',
