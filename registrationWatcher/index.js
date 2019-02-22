@@ -38,11 +38,17 @@ module.exports = async (context, timer) => {
         const activeEnrollments = allEnrollments.filter(reg => reg.registrationStatus == "Active")
         const waitlistedEnrollments = allEnrollments.filter(reg => reg.registrationStatus == "Waitlisted")
         if (activeEnrollments < maxCapacity) {
+            context.log("Space available: " + course.courseCode)
             if (waitlistedEnrollments.length > 0) {
+                context.log("Waitlist exists: " + course.courseCode)
                 const spotsToFill = maxCapacity - activeEnrollments
+                context.log("Spots to fill: " + spotsToFill)
                 const sortedByDateSubmitted = waitlistedEnrollments.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
                 const registrationsToBump = sortedByDateSubmitted.slice(0, spotsToFill)
-                registrationsToBump.forEach(registration => await setToActive(registration))
+                registrationsToBump.forEach(registration => {
+                    context.log("To date: " + registration)
+                    // setToActive(registration)
+                })
             } else return
         } else return
     })
@@ -53,8 +59,8 @@ module.exports = async (context, timer) => {
     */
 
     context.done()
+}
 
-    const setToActive = (registration) => {
-        context.log(registration)
-    }
+const setToActive = (registration) => {
+
 }
