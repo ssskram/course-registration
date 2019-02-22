@@ -46,7 +46,16 @@ module.exports = async (context, timer) => {
                 const sortedByDateSubmitted = waitlistedEnrollments.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
                 const registrationsToBump = sortedByDateSubmitted.slice(0, spotsToFill)
                 registrationsToBump.forEach(registration => {
-                    setToActive(registration)
+                    fetch('https://365proxy.azurewebsites.us/iphelp/updateCourseRegistration?id=' + registration.registrationId, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            "Registration_x0020_Status": "Active"
+                        }),
+                        headers: new Headers({
+                            'Authorization': 'Bearer ' + process.env.APP_365_API,
+                            'Content-type': 'application/json'
+                        })
+                    })
                 })
             } else return
         } else return
@@ -58,8 +67,4 @@ module.exports = async (context, timer) => {
     */
 
     context.done()
-    
-    const setToActive = (registration) => {
-        context.log("To bump: " + registration)
-    }
 }
