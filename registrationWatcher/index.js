@@ -63,5 +63,21 @@ module.exports = async (context, timer) => {
         For each one of these course, email all registered users, where status == "Active", and remind them of the event
     */
 
+    const impendingCourses = courses.filter(crs => {
+        context.log("-----------------------")
+        context.log(crs.courseCode)
+        context.log("-----------------------")
+        context.log("now: " + now)
+        const twentyFour = setDate(now.getDate() + 1)
+        context.log("plus 24: " + twentyFour)
+        const fortyEight = setDate(now.getDate() + 42)
+        context.log("plus 48: " + fortyEight)
+        const start = new Date(crs.startDate)
+        context.log("start date: " + start)
+        return start > twentyFour && start < fortyEight
+    })
+
+    context.log(impendingCourses)
+
     context.done()
 }
