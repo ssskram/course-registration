@@ -33,14 +33,20 @@ module.exports = async (context, timer) => {
 
     // for each course, if space is available and waitlist exists, bump oldest waitlisted enrollments to active
     courses.forEach(course => {
+        context.log(course.courseName)
+        context.log("----------------------------")
         const maxCapacity = course.maximumCapacity
+        context.log("Max capacity: " + maxCapacity)
         const allEnrollments = registrations.filter(reg => reg.courseCode == course.courseCode)
+        context.log("All enrollments: " + allEnrollments.length)
         const activeEnrollments = allEnrollments.filter(reg => reg.registrationStatus == "Active")
+        context.log("Active enrollments: " + activeEnrollments.length)
         const waitlistedEnrollments = allEnrollments.filter(reg => reg.registrationStatus == "Waitlisted")
+        context.log("Waitlisted enrollments: " + waitlistedEnrollments.length)
         if (activeEnrollments < maxCapacity) {
-            context.log("Space available: " + course.courseCode)
+            context.log("Space available: true")
             if (waitlistedEnrollments.length > 0) {
-                context.log("Waitlist exists: " + course.courseCode)
+                context.log("Waitlist exists: true")
                 const spotsToFill = maxCapacity - activeEnrollments
                 context.log("Spots to fill: " + spotsToFill)
                 const sortedByDateSubmitted = waitlistedEnrollments.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
