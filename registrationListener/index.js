@@ -5,7 +5,7 @@ global.Headers = fetch.Headers
 module.exports = async (context, req) => {
 
     // registration details
-    const registrationId = req.query.body.registrationId
+    const registrationId = req.body.registrationId
     const activity = req.query.type
     const registrationType = req.body.registrationType
     const user = req.body.user
@@ -123,12 +123,13 @@ module.exports = async (context, req) => {
                     'Content-type': 'application/json'
                 })
             })
+            .then(response => response.text())
             .then(eventId => {
                 fetch('https://365proxy.azurewebsites.us/iphelp/courseRegistrationCalendarEvent', {
                     method: 'POST',
                     body: JSON.stringify({
-                        "Registration_x0020_ID": eventId,
-                        "Event_x0020_ID": registrationId
+                        "Registration_x0020_ID": registrationId,
+                        "Event_x0020_ID": eventId
                     }),
                     headers: new Headers({
                         'Authorization': 'Bearer ' + process.env.APP_365_API,
