@@ -64,22 +64,20 @@ module.exports = async (context, timer) => {
     */
 
     const impendingCourses = courses.filter(crs => {
-        context.log("-----------------------")
-        context.log(crs.courseCode)
-        context.log("-----------------------")
-        context.log("now: " + now)
         let twentyFour = new Date()
         twentyFour.setDate(twentyFour.getDate() + 1)
-        context.log("plus 24: " + twentyFour)
         let fortyEight = new Date()
         fortyEight.setDate(fortyEight.getDate() + 2)
-        context.log("plus 48: " + fortyEight)
         const start = new Date(crs.startDate)
-        context.log("start date: " + start)
         return start > twentyFour && start < fortyEight
     })
 
-    context.log(impendingCourses)
+    impendingCourses.forEach(course => {
+        const courseRegistrations = registrations.filter(reg => reg.courseCode == course.courseCode)
+        courseRegistrations.filter(c => c.registrationId == "Active").forEach(activeReg => {
+            context.log(activeReg.user)
+        })
+    })
 
     context.done()
 }
