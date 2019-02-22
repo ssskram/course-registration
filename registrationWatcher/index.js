@@ -63,6 +63,8 @@ module.exports = async (context, timer) => {
         For each one of these course, email all registered users, where status == "Active", and remind them of the event
     */
 
+    const path = __dirname + '//emailTemplates/courseReminder.html'
+
     const impendingCourses = courses.filter(crs => {
         let twentyFour = new Date()
         twentyFour.setDate(twentyFour.getDate() + 1)
@@ -73,11 +75,47 @@ module.exports = async (context, timer) => {
     })
 
     impendingCourses.forEach(course => {
+        context.log(course.courseCode)
         const courseRegistrations = registrations.filter(reg => reg.courseCode == course.courseCode)
-        courseRegistrations.filter(c => c.registrationId == "Active").forEach(activeReg => {
-            context.log(activeReg.user)
+        courseRegistrations.filter(c => c.registrationStatus == "Active").forEach(activeReg => {
+            fs.readFile(path, 'utf8', async (err, email) => {
+                const load = {
+                    to: activeReg.user,
+                    from: {
+                        email: activeReg.user,
+                        name: 'I&P Help'
+                    },
+                    subject: course.courseName,
+                    html: await String.format(email,
+                        course.courseName, // 0
+                        course.courseDescription, // 1
+                        course.startDate, // 2
+                        course.courseLocation) // 3    
+                }
+                await sendEmail(load)
+            })
         })
     })
 
     context.done()
+
+    const sendEmail = async (load) => {
+        await fetch('https://sendgridproxy.azurewebsites.us/sendMail/single', {
+            method: 'POST',
+            body: JSON.stringify(load),
+            headers: new Headers({
+                'Authorization': 'Bearer ' + process.env.APP_SENDGRID_API,
+                'Content-type': 'application/json'
+            })
+        })
+    }
+}
+
+String.format = function () {
+    var s = arguments[0]
+    for (var i = 0; i < arguments.length - 1; i++) {
+        var reg = new RegExp("\\{" + i + "\\}", "gm")
+        s = s.replace(reg, arguments[i + 1])
+    }
+    return s
 }
