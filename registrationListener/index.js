@@ -17,7 +17,7 @@ module.exports = async (context, req) => {
             })
         })
         .then(res => res.json())
-        .then(data => data)
+        .then(data => data[0])
 
     // base sendgrid load
     let load = {
@@ -34,10 +34,10 @@ module.exports = async (context, req) => {
             fs.readFile(path, 'utf8', async (err, data) => {
                 load.subject = "Course registration complete"
                 load.html = await String.format(data,
-                    course[0].courseName, // 0
-                    course[0].courseDescription, // 1
-                    course[0].startDate, // 2
-                    course[0].courseLocation, // 3
+                    course.courseName, // 0
+                    course.courseDescription, // 1
+                    course.startDate, // 2
+                    course.courseLocation, // 3
                     cancelUrl) // 4
                 await calendarEvent()
                 await sendEmail(load)
@@ -49,9 +49,9 @@ module.exports = async (context, req) => {
             fs.readFile(path, 'utf8', async (err, data) => {
                 load.subject = "You're on the waitlist"
                 load.html = await String.format(data,
-                    course[0].courseName, // 0
-                    course[0].courseDescription, // 1
-                    course[0].startDate, // 2
+                    course.courseName, // 0
+                    course.courseDescription, // 1
+                    course.startDate, // 2
                     cancelUrl) // 3                
                 await sendEmail(load)
             })
@@ -63,10 +63,10 @@ module.exports = async (context, req) => {
             fs.readFile(path, 'utf8', async (err, data) => {
                 load.subject = "Course registration complete"
                 load.html = await String.format(data,
-                    course[0].courseName, // 0
-                    course[0].courseDescription, // 1
-                    course[0].startDate, // 2
-                    course[0].courseLocation, // 3
+                    course.courseName, // 0
+                    course.courseDescription, // 1
+                    course.startDate, // 2
+                    course.courseLocation, // 3
                     cancelUrl) // 4
                 await calendarEvent()
                 await sendEmail(load)
@@ -77,9 +77,9 @@ module.exports = async (context, req) => {
             fs.readFile(path, 'utf8', async (err, data) => {
                 load.subject = "Course registration canceled"
                 load.html = await String.format(data,
-                    course[0].courseName, // 0
-                    course[0].courseDescription, // 1
-                    course[0].startDate) // 2
+                    course.courseName, // 0
+                    course.courseDescription, // 1
+                    course.startDate) // 2
                 await sendEmail(load)
             })
         }
@@ -98,21 +98,21 @@ module.exports = async (context, req) => {
 
     const calendarEvent = async () => {
         const event = {
-            subject: course[0].courseName,
+            subject: course.courseName,
             body: {
                 "contentType": "HTML",
-                "content": course[0].courseDescription
+                "content": course.courseDescription
             },
             start: {
-                "dateTime": course[0].startDate,
+                "dateTime": course.startDate,
                 "timeZone": "America/New_York"
             },
             end: {
-                "dateTime": course[0].endDate,
+                "dateTime": course.endDate,
                 "timeZone": "America/New_York"
             },
             location: {
-                "displayName": course[0].courseLocation
+                "displayName": course.courseLocation
             },
             attendees: []
         }
