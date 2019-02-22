@@ -10,7 +10,6 @@ module.exports = async (context, req) => {
     const registrationType = req.body.registrationType
     const user = req.body.user
     const cancelUrl = process.env.CANCEL_URL + "&id=" + registrationId + "&user=" + user
-    context.log(cancelUrl)
     const course = await fetch("https://365proxy.azurewebsites.us/iphelp/course?courseCode=" + req.body.courseCode, {
             method: 'get',
             headers: new Headers({
