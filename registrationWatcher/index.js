@@ -46,8 +46,7 @@ module.exports = async (context, timer) => {
                 const sortedByDateSubmitted = waitlistedEnrollments.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
                 const registrationsToBump = sortedByDateSubmitted.slice(0, spotsToFill)
                 registrationsToBump.forEach(registration => {
-                    context.log("To bump: " + registration.user)
-                    // setToActive(registration)
+                    setToActive(registration)
                 })
             } else return
         } else return
@@ -59,8 +58,8 @@ module.exports = async (context, timer) => {
     */
 
     context.done()
-}
-
-const setToActive = (registration) => {
-
+    
+    const setToActive = (registration) => {
+        context.log("To bump: " + registration)
+    }
 }
