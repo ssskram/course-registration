@@ -7,7 +7,7 @@ local.settings.json
 
 # dev environment
 extensions.csproj
-.vscode
+
 bin
 obj
 local.settings.json
