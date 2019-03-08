@@ -1,5 +1,6 @@
 const fetch = require('node-fetch')
 var fs = require('fs')
+
 global.Headers = fetch.Headers
 
 module.exports = async (context, timer) => {
