@@ -79,6 +79,7 @@ module.exports = async (context, timer) => {
     impendingCourses.forEach(course => {
         const courseRegistrations = registrations.filter(reg => reg.courseCode == course.courseCode)
         courseRegistrations.filter(c => c.registrationStatus == "Active").forEach(activeReg => {
+            const cancelUrl = process.env.CANCEL_URL + "&id=" + activeReg.registrationId + "&user=" + activeReg.user
             fs.readFile(path, 'utf8', async (err, email) => {
                 const load = {
                     to: activeReg.user,
@@ -91,7 +92,8 @@ module.exports = async (context, timer) => {
                         course.courseName, // 0
                         course.courseDescription, // 1
                         course.startDate, // 2
-                        course.courseLocation) // 3    
+                        course.courseLocation, // 3
+                        cancelUrl) // 4    
                 }
                 await sendEmail(load)
             })
