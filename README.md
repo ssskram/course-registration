@@ -16,7 +16,7 @@ Triggered by HTTP, this function takes a registration ID (registrationId) and a 
 }
 ```
 
-This function is called up whenever a new course registration record is created or updated.  It sends the necessary email confirmations of whatever activity has occured, and creates calendar events as necessary.
+This function is called up whenever a course registration record is created or updated.  It sends the necessary email confirmations of whatever activity has occured, and creates calendar events as necessary.
 
 ## registrationWatcher
 This is a cron job that runs nightly.  It does two things: first, it checks to see if waitlisted registrations can be bumped to full registrations (i.e. somebody canceled their registration during the preceding day).  Second, for courses occuring within 48 hours, it sends out reminder emails to all participants fully registered for the event.
